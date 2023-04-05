@@ -1,11 +1,32 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from '@/styles/Home.module.css'
+import Head from "next/head"
+import Image from "next/image"
+import { Inter } from "next/font/google"
+import styles from "@/styles/Home.module.css"
+import {
+  Box,
+  Center,
+  Flex,
+  FormControl,
+  FormLabel,
+  Input,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  Text,
+} from "@chakra-ui/react"
+import { useState } from "react"
+import LoanCard from "@/components/LoanCard"
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] })
 
 export default function Home() {
+  const [loan, setLoan] = useState(500000)
+
+  const [loanDuration1, setLoanDuration1] = useState(15)
+  const [loanDuration2, setLoanDuration2] = useState(30)
+
   return (
     <>
       <Head>
@@ -15,109 +36,55 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <div className={styles.description}>
-          <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>src/pages/index.tsx</code>
-          </p>
-          <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              By{' '}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
-                priority
-              />
-            </a>
-          </div>
-        </div>
+        {/* <Text>Is a 15 year mortgage better than 30 year?</Text> */}
 
-        <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
-          <div className={styles.thirteen}>
-            <Image
-              src="/thirteen.svg"
-              alt="13"
-              width={40}
-              height={31}
-              priority
-            />
-          </div>
-        </div>
+        {/* {amortization({
+          loan: 300000,
+          years: loanDuration1,
+          interestRate: 0.06,
+        })} */}
 
-        <div className={styles.grid}>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
+        <FormControl>
+          <FormLabel>Loan Value</FormLabel>
+          <NumberInput
+            value={loan}
+            onChange={(_, valAsNumber) => setLoan(valAsNumber)}
+            step={10000}
           >
-            <h2 className={inter.className}>
-              Docs <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Find in-depth information about Next.js features and&nbsp;API.
-            </p>
-          </a>
+            <NumberInputField />
+            <NumberInputStepper>
+              <NumberIncrementStepper />
+              <NumberDecrementStepper />
+            </NumberInputStepper>
+          </NumberInput>
+        </FormControl>
 
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Learn <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </a>
+        <Flex gap={5}>
+          <LoanCard years={15} onLoanYearsChange={setLoanDuration1} />
 
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Templates <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Discover and deploy boilerplate example Next.js&nbsp;projects.
-            </p>
-          </a>
+          <Center>vs.</Center>
 
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Deploy <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
-            </p>
-          </a>
-        </div>
+          <LoanCard years={30} onLoanYearsChange={setLoanDuration2} />
+        </Flex>
+
+        <Flex>Loan 1</Flex>
       </main>
     </>
   )
+}
+
+function amortization({ loan, years, interestRate }) {
+  let numberOfPayments = 12
+
+  const numerator = loan * (interestRate / numberOfPayments)
+  const denominator =
+    1 - (1 + interestRate / numberOfPayments) ** -(numberOfPayments * years)
+
+  const monthlyPayment = numerator * denominator
+
+  const totalCost = years * monthlyPayment * numberOfPayments
+
+  const interestPaid = totalCost - loan
+
+  return monthlyPayment
 }
