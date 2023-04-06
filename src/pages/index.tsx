@@ -112,7 +112,7 @@ export default function Home() {
                 <Text>
                   You start investing your monthly mortgage payment amount (
                   {asCurrency(monthlyPayment1)}) for{" "}
-                  {loanDuration2 - loanDuration1} years once you've fully paid
+                  {loanDuration2 - loanDuration1} years once you have fully paid
                   off the loan:
                 </Text>
 
@@ -166,8 +166,8 @@ export default function Home() {
           <Flex flexDir="column">
             <Heading>Results</Heading>
             <Text>
-              Loan Option {loanOption1IsBetter() ? "1" : "2"} is better. You'll
-              earn{" "}
+              Loan Option {loanOption1IsBetter() ? "1" : "2"} is better. You
+              will earn{" "}
               {asCurrency(
                 Math.abs(investingMinusTotalCost1 - investingMinusTotalCost2)
               )}{" "}
