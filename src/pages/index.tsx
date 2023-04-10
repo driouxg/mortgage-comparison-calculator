@@ -26,6 +26,7 @@ import Section from "@/components/Section"
 import Navbar from "@/components/Navbar"
 
 export default function Home() {
+  const indexFundAverageReturnRate = 0.075
   const [loan, setLoan] = useState(400000)
 
   const [loanDuration1, setLoanDuration1] = useState(15)
@@ -45,11 +46,17 @@ export default function Home() {
   }, [loan, loanDuration1, loanDuration2, interestRate1, interestRate2])
 
   const investingMinusTotalCost1 =
-    compoundInterestWithContributions(loanDuration1, monthlyPayment1) -
-    totalCost(loan, loanDuration1, interestRate1)
+    compoundInterestWithContributions(
+      loanDuration1,
+      monthlyPayment1,
+      indexFundAverageReturnRate
+    ) - totalCost(loan, loanDuration1, interestRate1)
   const investingMinusTotalCost2 =
-    compoundInterestWithContributions(loanDuration2, monthlyPaymentDiff) -
-    totalCost(loan, loanDuration2, interestRate2)
+    compoundInterestWithContributions(
+      loanDuration2,
+      monthlyPaymentDiff,
+      indexFundAverageReturnRate
+    ) - totalCost(loan, loanDuration2, interestRate2)
 
   const loanOption1IsBetter = () =>
     investingMinusTotalCost2 <= investingMinusTotalCost1
@@ -120,7 +127,8 @@ export default function Home() {
                   {asCurrency(
                     compoundInterestWithContributions(
                       loanDuration1,
-                      monthlyPayment1
+                      monthlyPayment1,
+                      indexFundAverageReturnRate
                     )
                   )}
                 </Heading>
@@ -140,15 +148,17 @@ export default function Home() {
               <Box>
                 <Text>
                   If you invest the monthly payment difference between loan 1
-                  and 2 ({asCurrency(monthlyPaymentDiff)}) into S&P 500 for a
-                  10% annualized return for {loanDuration2} years.
+                  and 2 ({asCurrency(monthlyPaymentDiff)}) into S&P 500 for a{" "}
+                  {indexFundAverageReturnRate * 100}% annualized return for{" "}
+                  {loanDuration2} years.
                 </Text>
 
                 <Heading as="h3" size="md">
                   {asCurrency(
                     compoundInterestWithContributions(
                       loanDuration2,
-                      monthlyPaymentDiff
+                      monthlyPaymentDiff,
+                      indexFundAverageReturnRate
                     )
                   )}
                 </Heading>

@@ -2,10 +2,9 @@ const numTimesCompoundedPerYear = 1
 
 export function compoundInterestWithContributions(
   years: number,
-  monthlyContributions: number
+  monthlyContributions: number,
+  interestRate: number
 ) {
-  const interestRate = 0.1
-
   return (
     compoundInterest(years, interestRate) +
     futureValueOfSeries(years, monthlyContributions, interestRate)
