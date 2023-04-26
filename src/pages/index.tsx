@@ -26,8 +26,9 @@ import Section from "@/components/Section"
 import Navbar from "@/components/Navbar"
 
 export default function Home() {
-  const indexFundAverageReturnRate = 0.075
   const [loan, setLoan] = useState(400000)
+  const [indexFundAverageReturnRate, setIndexFundAverageReturnRate] =
+    useState(0.075)
 
   const [loanDuration1, setLoanDuration1] = useState(15)
   const [loanDuration2, setLoanDuration2] = useState(30)
@@ -82,6 +83,24 @@ export default function Home() {
               value={loan}
               onChange={(_, valAsNumber) => setLoan(valAsNumber)}
               step={10000}
+            >
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+
+            <FormLabel mt="1rem">
+              Index Fund Average Return Percentage
+            </FormLabel>
+            <NumberInput
+              value={indexFundAverageReturnRate * 100}
+              onChange={(_, valAsNumber) =>
+                setIndexFundAverageReturnRate(valAsNumber / 100)
+              }
+              precision={3}
+              step={0.1}
             >
               <NumberInputField />
               <NumberInputStepper>
